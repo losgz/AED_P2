@@ -21,7 +21,6 @@
 
 #include "Graph.h"
 #include "IntegersStack.h"
-#include "SortedList.h"
 #include "instrumentation.h"
 
 struct _GraphBellmanFordAlg {
