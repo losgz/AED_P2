@@ -6,10 +6,10 @@
 // GraphBellmanFord - Bellman-Ford Algorithm
 //
 
-// Student Name :
-// Student Number :
-// Student Name :
-// Student Number :
+// Student Name : Eduardo José Farinha do Rosário
+// Student Number : 119234
+// Student Name : Henrique Marques Lopes
+// Student Number : 119954
 
 /*** COMPLETE THE GraphBellmanFordAlgExecute FUNCTION ***/
 
