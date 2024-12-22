@@ -36,6 +36,8 @@ Graph* GraphComputeTransitiveClosure(Graph* g) {
   //vou criar o grafo para o fecho transitivo
   Graph* transitiveClosure = GraphCreate(GraphGetNumVertices(g), 1, 0);
 
+  assert(transitiveClosure != NULL);
+
   unsigned int numVertices = GraphGetNumVertices(g);
 
   //vou a cada vertice do grafo

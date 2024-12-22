@@ -157,7 +157,7 @@ Graph *GraphCreateTranspose(const Graph *g) {
             
             //agora inverto a direcao da aresta
             unsigned int u = i;             //vertice de origem no original
-            unsigned int v = e;             //vertice de destino no orignal
+            unsigned int v = e->adjVertex;  //vertice de destino no orignal
             double weight = e->weight;      //peso da aresta se existir
 
             //adicionar a aresta invertida no grafo transposto
