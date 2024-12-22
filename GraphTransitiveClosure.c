@@ -53,9 +53,8 @@ Graph *GraphComputeTransitiveClosure(Graph *g) {
         // percorrer os resultados bellman-ford
         for (unsigned int v = 0; v < numVertices; v++) {
             ITERATION++;
-            int distance = GraphBellmanFordAlgDistance(bellmanGraph, v);
             // ver se o vertice é alcancavel
-            if (distance != -1 && distance != 0) {
+            if (GraphBellmanFordAlgReached(bellmanGraph, v) && u != v) {
                 GraphAddEdge(transitiveClosure, u, v);
             }
         }
