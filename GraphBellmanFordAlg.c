@@ -59,6 +59,8 @@ GraphBellmanFordAlg *GraphBellmanFordAlgExecute(Graph *g,
     result->predecessor = (int *)malloc(numVertices * sizeof(int));
     result->marked = (unsigned int *)malloc(numVertices * sizeof(unsigned int));
 
+    assert((result->distance != NULL) && (result->predecessor != NULL) && (result->marked != NULL));
+
     // initialize the result distance, predecessor and marked;
     for (int i = 0; i < numVertices; i++) {
         result->distance[i] = -1;
