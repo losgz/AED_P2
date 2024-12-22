@@ -26,38 +26,40 @@
 // Compute the transitive closure of a directed graph
 // Return the computed transitive closure as a directed graph
 // Use the Bellman-Ford algorithm
-Graph* GraphComputeTransitiveClosure(Graph* g) {
-  assert(g != NULL);
-  assert(GraphIsDigraph(g));
-  assert(GraphIsWeighted(g) == 0);
+Graph *GraphComputeTransitiveClosure(Graph *g) {
+    assert(g != NULL);
+    assert(GraphIsDigraph(g));
+    assert(GraphIsWeighted(g) == 0);
 
-  // COMPLETE THE CODE
+    // COMPLETE THE CODE
 
-  //vou criar o grafo para o fecho transitivo
-  Graph* transitiveClosure = GraphCreate(GraphGetNumVertices(g), 1, 0);
+    // vou criar o grafo para o fecho transitivo
+    Graph *transitiveClosure = GraphCreate(GraphGetNumVertices(g), 1, 0);
 
-  assert(transitiveClosure != NULL);
+    assert(transitiveClosure != NULL);
 
-  unsigned int numVertices = GraphGetNumVertices(g);
+    unsigned int numVertices = GraphGetNumVertices(g);
 
-  //vou a cada vertice do grafo
-  for (unsigned int source = 0; source < numVertices; source++) {
-    //usar Bellman-Ford para determinar os vertices alcancaveis a partir da 'source'
-    GraphBellmanFordAlg* distances = GraphBellmanFordAlgExecute(g, source);
-    assert(distances != NULL);
+    // vou a cada vertice do grafo
+    for (unsigned int u = 0; u < numVertices; u++) {
+        // usar Bellman-Ford para determinar os vertices alcancaveis a partir da
+        // 'source'
+        GraphBellmanFordAlg *bellmanGraph =
+            GraphBellmanFordAlgExecute(g, u);
+        assert(bellmanGraph != NULL);
 
-    //percorrer os resultados bellman-ford
-    for (unsigned int target = 0; target < numVertices; target++) {
-      if (distances[target] != -1) {  //ver se o vertice é alcancavel
-        if (source != target) {   //evitar loops (u -> u)
-          GraphAddEdge(transitiveClosure, source, target);
+        // percorrer os resultados bellman-ford
+        for (unsigned int v = 0; v < numVertices; v++) {
+            int distance = GraphBellmanFordAlgDistance(bellmanGraph, v);
+            // ver se o vertice é alcancavel
+            if (distance != -1 && distance != 0) {
+                GraphAddEdge(transitiveClosure, u, v);
+            }
         }
-      }
+
+        // libertar memoria usada para os resultados bellman-ford
+        GraphBellmanFordAlgDestroy(&bellmanGraph);
     }
 
-    //libertar memoria usada para os resultados bellman-ford
-    free(distances);
-  }
-
-  return transitiveClosure;
+    return transitiveClosure;
 }
