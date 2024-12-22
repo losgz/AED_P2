@@ -50,6 +50,7 @@ GraphEccentricityMeasures *GraphEccentricityMeasuresCompute(Graph *g) {
     unsigned int numVertices = GraphGetNumVertices(g);
 
     result->eccentricity = (int *)malloc(numVertices * sizeof(int));
+    assert(result->eccentricity != NULL);
     result->graphRadius = -1;   // initialize with -1
     result->graphDiameter = -1; // initialize with -1
     result->graph = g;
@@ -78,6 +79,7 @@ GraphEccentricityMeasures *GraphEccentricityMeasuresCompute(Graph *g) {
 
     result->centralVertices =
         (unsigned int *)malloc((numCentralVertices + 1) * sizeof(unsigned int));
+    assert(result->centralVertices != NULL);
 
     result->centralVertices[0] = numCentralVertices;
     numCentralVertices = 0; // reset to 0 for the addition to the array

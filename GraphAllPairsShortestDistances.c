@@ -39,10 +39,14 @@ GraphAllPairsShortestDistancesExecute(Graph *g) {
         (GraphAllPairsShortestDistances *)malloc(
             sizeof(GraphAllPairsShortestDistances));
 
+    assert(result != NULL);
+
     unsigned int numVertices = GraphGetNumVertices(g);
 
     result->graph = g;
     result->distance = (int **)malloc(numVertices * sizeof(int *));
+
+    assert(result->distance != NULL);
 
     GraphBellmanFordAlg *sdGraph;
     int distance;
