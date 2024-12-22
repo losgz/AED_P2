@@ -11,43 +11,31 @@
 
 #include "Graph.h"
 #include "GraphBellmanFordAlg.h"
-#include "IntegersStack.h"
 #include "instrumentation.h"
 
-#define EDGCHECK InstrCount[0]
+#define ITERATION InstrCount[0]
 
-// não funfa
 void ComplexityTable(Graph *g) {
     int numVertices = GraphGetNumVertices(g);
-    int numEdges;
-    Stack *path;
-    
-    printf("\n| Vertex | Num Edges | Edge Checks |\n");
+    int numEdges = GraphGetNumEdges(g);
+
+    printf("\n| Vertex | Num Edges | Iterations |\n");
     for (int i = 0; i < numVertices; i++) {
         InstrReset();
-        numEdges = 0;
         GraphBellmanFordAlg *BF_result = GraphBellmanFordAlgExecute(g, i);
-        
-        for (int j = 0; j < numVertices; j++) {
-            path = GraphBellmanFordAlgPathTo(BF_result, j);
-            while (StackIsEmpty(path) == 0) {
-                numEdges++;
-                StackPop(path);
-            }
-            StackDestroy(&path);
-        }
-        printf("| %6d | %9d | %11lu |\n", numVertices, numEdges - 1, EDGCHECK);
+
+        printf("| %6d | %9d | %10lu |\n", numVertices, numEdges, ITERATION);
 
         GraphBellmanFordAlgDestroy(&BF_result);
     }
-    printf("| %6c | %9c | %11c |\n", ' ', ' ', ' ');
-} 
+    printf("| %6c | %9c | %10c |\n", ' ', ' ', ' ');
+}
 
 int main(void) {
 
     InstrCalibrate();
-    InstrName[0] = "edgeCheck"; // InstrName[0] will count the number of edge checks
-    
+    InstrName[0] =
+        "Iterations"; // InstrName[0] will count the number iterations
 
     // What kind of graph is dig01?
     Graph *dig01 = GraphCreate(6, 1, 0);

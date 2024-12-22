@@ -23,7 +23,7 @@
 #include "IntegersStack.h"
 #include "instrumentation.h"
 
-#define EDGCHECK InstrCount[0]
+#define ITERATION InstrCount[0]
 
 struct _GraphBellmanFordAlg {
     unsigned int *marked; // To mark vertices when reached for the first time
@@ -52,8 +52,6 @@ GraphBellmanFordAlg *GraphBellmanFordAlgExecute(Graph *g,
 
     unsigned int numVertices = GraphGetNumVertices(g);
 
-    unsigned int numEdeges = GraphGetNumEdges(g);
-
     // allocate the required memory
     result->distance = (int *)malloc(numVertices * sizeof(int));
     result->predecessor = (int *)malloc(numVertices * sizeof(int));
@@ -62,7 +60,7 @@ GraphBellmanFordAlg *GraphBellmanFordAlgExecute(Graph *g,
     assert((result->distance != NULL) && (result->predecessor != NULL) && (result->marked != NULL));
 
     // initialize the result distance, predecessor and marked;
-    for (int i = 0; i < numVertices; i++) {
+    for (unsigned int i = 0; i < numVertices; i++) {
         result->distance[i] = -1;
         result->predecessor[i] = -1;
         result->marked[i] = 0; // set all elements to false
@@ -76,18 +74,18 @@ GraphBellmanFordAlg *GraphBellmanFordAlgExecute(Graph *g,
     unsigned int *adjacents;
     int updated;
 
-    for (int i = 0; i < numVertices; i++) {
+    for (unsigned int i = 0; i < numVertices; i++) {
         updated = 0;
-        for (int u = 0; u < numVertices; u++) {
+        for (unsigned int u = 0; u < numVertices; u++) {
             if (result->marked[u] == 0) // ignores unmarked elements
                 continue;
 
             adjacents = GraphGetAdjacentsTo(g, u);
             unsigned int size = adjacents[0]; // number of adjacent vertices
 
-            for (int j = 1; j <= size; j++) {
+            for (unsigned int j = 1; j <= size; j++) {
                 unsigned int v = adjacents[j];
-                EDGCHECK++;            
+                ITERATION++;            
                 // checks if theres no path to the vertex v or if the new path
                 // is shorter
                 if (result->distance[v] == -1 ||
