@@ -43,7 +43,7 @@ Graph* GraphComputeTransitiveClosure(Graph* g) {
   //vou a cada vertice do grafo
   for (unsigned int source = 0; source < numVertices; source++) {
     //usar Bellman-Ford para determinar os vertices alcancaveis a partir da 'source'
-    int* distances = BellmanFordAlgotihm(g, source);
+    GraphBellmanFordAlg* distances = GraphBellmanFordAlgExecute(g, source);
     assert(distances != NULL);
 
     //percorrer os resultados bellman-ford
