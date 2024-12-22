@@ -23,6 +23,8 @@
 #include "IntegersStack.h"
 #include "instrumentation.h"
 
+#define EDGCHECK InstrCount[0]
+
 struct _GraphBellmanFordAlg {
     unsigned int *marked; // To mark vertices when reached for the first time
     int *
@@ -70,8 +72,10 @@ GraphBellmanFordAlg *GraphBellmanFordAlgExecute(Graph *g,
 
     // initialize variables
     unsigned int *adjacents;
+    int updated;
 
     for (int i = 0; i < numVertices; i++) {
+        updated = 0;
         for (int u = 0; u < numVertices; u++) {
             if (result->marked[u] == 0) // ignores unmarked elements
                 continue;
@@ -80,10 +84,10 @@ GraphBellmanFordAlg *GraphBellmanFordAlgExecute(Graph *g,
             unsigned int size = adjacents[0]; // number of adjacent vertices
 
             for (int j = 1; j <= size; j++) {
-                unsigned int v = adjacents[j]; 
-
-                // checks if theres no path to vertex v or if the new path is
-                // shorter
+                unsigned int v = adjacents[j];
+                EDGCHECK++;            
+                // checks if theres no path to the vertex v or if the new path
+                // is shorter
                 if (result->distance[v] == -1 ||
                     result->distance[u] + 1 < result->distance[v]) {
 
@@ -91,10 +95,13 @@ GraphBellmanFordAlg *GraphBellmanFordAlgExecute(Graph *g,
                     result->distance[v] = result->distance[u] + 1;
                     result->predecessor[v] = u;
                     result->marked[v] = 1;
+
+                    updated = 1;
                 }
             }
             free(adjacents); // free the array with the adjacent vertices
         }
+        if (!updated) break;
     }
 
     return result;
