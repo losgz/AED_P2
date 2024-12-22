@@ -34,6 +34,7 @@ void ComplexityTable(Graph *g) {
                 numEdges++;
                 StackPop(path);
             }
+            StackDestroy(&path);
         }
         printf("| %6d | %9d | %11lu |\n", numVertices, numEdges - 1, EDGCHECK);
 
