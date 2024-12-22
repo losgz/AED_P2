@@ -140,46 +140,39 @@ Graph *GraphCreateTranspose(const Graph *g) {
     assert(g->isDigraph);
     assert(g->isComplete == 0);
 
-    // definir propriedades de g em variáveis
-    unsigned int num_vertices = g->numVertices;
-    int isDiagraph = g->isDigraph;
+    //criar o grafico transposto
+    Graph *graph_transpose = GraphCreate(g->numVertices, 1, g->isWeighted);
 
-    // inicializar g transpose
-    Graph *gt = GraphCreate(num_vertices, 1, g->isWeighted);
-
-    
+    //iterar pelos vértices do grafo original
     List *vertices = g->verticesList;
     ListMoveToHead(vertices);
-
-    for (unsigned int i = 0; i < num_vertices; ListMoveToNext(vertices), i++) {
+    for (unsigned int i = 0; i < g->numVertices; ListMoveToNext(vertices), i++) {
         struct _Vertex *v = ListGetCurrentItem(vertices);
         List *edges = v->edgesList;
-        for (unsigned int j = 0; j < num_vertices; j++) {
-            if (i == j) {
-                continue;
+
+        //iterar arestas do vertice atual
+        ListMoveToHead(edges);
+        for (unsigned int j = 0; j < ListGetSize(edges); j++) {
+            struct _Edge *e = ListGetCurrentItem(edges);
+            
+            //agora inverto a direcao da aresta
+            unsigned int u = i;             //vertice de origem no original
+            unsigned int v = e;             //vertice de destino no orignal
+            double weight = e->weight;      //peso da aresta se existir
+
+            //adicionar a aresta invertida no grafo transposto
+            if (g->isWeighted) {
+                GraphAddWeightedEdge(graph_transpose, v, u, weight);
+            } else {
+                GraphAddEdge(graph_transpose, v, u);
             }
-            struct _Edge *new = (struct _Edge *)malloc(sizeof(struct _Edge));
-            if (new == NULL)
-                abort();
-            new->adjVertex = j;
-            new->weight = 1;
 
-            ListInsert(edges, new);
-        }
-        if (gt->isDigraph) {
-            v->inDegree = gt->numVertices - 1;
-            v->outDegree = gt->numVertices - 1;
-        } else {
-            v->outDegree = gt->numVertices - 1;
+            ListMoveToNext(edges);
+
         }
     }
-    if (gt->isDigraph) {
-        gt->numEdges = num_vertices * (num_vertices - 1);
-    } else {
-        gt->numEdges = num_vertices * (num_vertices - 1) / 2;
-    }
 
-    return gt;
+    return graph_transpose;
 }
 
 void GraphDestroy(Graph **p) {
