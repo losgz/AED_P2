@@ -23,6 +23,8 @@
 #include "GraphBellmanFordAlg.h"
 #include "instrumentation.h"
 
+#define ITERATION InstrCount[0]
+
 // Compute the transitive closure of a directed graph
 // Return the computed transitive closure as a directed graph
 // Use the Bellman-Ford algorithm
@@ -50,9 +52,9 @@ Graph *GraphComputeTransitiveClosure(Graph *g) {
 
         // percorrer os resultados bellman-ford
         for (unsigned int v = 0; v < numVertices; v++) {
-            int distance = GraphBellmanFordAlgDistance(bellmanGraph, v);
+            ITERATION++;
             // ver se o vertice é alcancavel
-            if (distance != -1 && distance != 0) {
+            if (GraphBellmanFordAlgReached(bellmanGraph, v) && u != v) {
                 GraphAddEdge(transitiveClosure, u, v);
             }
         }
