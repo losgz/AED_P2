@@ -122,7 +122,7 @@ int main(void) {
     GraphAddEdge(test2, 2, 3);
     GraphAddEdge(test2, 3, 4);
 
-    Graph *test3 = GraphCreateComplete(9, 0);
+    Graph *test3 = GraphCreateComplete(5, 0);
 
     GraphDisplayDOT(test3);
 
