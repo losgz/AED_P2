@@ -79,17 +79,22 @@ GraphBellmanFordAlg *GraphBellmanFordAlgExecute(Graph *g,
     unsigned int *adjacents;
     int updated;
 
-    for (unsigned int i = 0; i < numVertices; i++) {
+    for (unsigned int i = 1; i < numVertices; i++) {
+
         updated = 0;
-        int *justMarked = calloc(numVertices, numVertices * sizeof(unsigned int));
+        unsigned int *justMarked = calloc(numVertices, numVertices * sizeof(unsigned int));
+
         for (unsigned int u = 0; u < numVertices; u++) {
+
             if (result->marked[u] == 0 || justMarked[u] == 1) // ignores unmarked elements
                 continue;
+
 
             adjacents = GraphGetAdjacentsTo(g, u);
             unsigned int size = adjacents[0]; // number of adjacent vertices
 
             for (unsigned int j = 1; j <= size; j++) {
+
                 ITERATION++;
                 unsigned int v = adjacents[j];
                 // checks if theres no path to the vertex v or if the new path
@@ -106,6 +111,7 @@ GraphBellmanFordAlg *GraphBellmanFordAlgExecute(Graph *g,
                     updated = 1;
                 }
             }
+
             free(adjacents); // free the array with the adjacent vertices
         }
         if (!updated)

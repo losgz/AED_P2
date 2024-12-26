@@ -122,20 +122,7 @@ int main(void) {
     GraphAddEdge(test2, 2, 3);
     GraphAddEdge(test2, 3, 4);
 
-    Graph *test3 = GraphCreate(5, 0, 0);
-    GraphAddEdge(test3, 0, 1);
-    GraphAddEdge(test3, 0, 2);
-    GraphAddEdge(test3, 0, 3);
-    GraphAddEdge(test3, 0, 4);
-
-    GraphAddEdge(test3, 1, 2);
-    GraphAddEdge(test3, 1, 3);
-    GraphAddEdge(test3, 1, 4);
-
-    GraphAddEdge(test3, 2, 3);
-    GraphAddEdge(test3, 2, 4);
-
-    GraphAddEdge(test3, 3, 4);
+    Graph *test3 = GraphCreateComplete(9, 0);
 
     GraphDisplayDOT(test3);
 
