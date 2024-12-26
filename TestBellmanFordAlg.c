@@ -18,17 +18,17 @@
 void ComplexityTable(Graph *g) {
     int numVertices = GraphGetNumVertices(g);
     int numEdges = GraphGetNumEdges(g);
-
+    printf("Num Vertices: %d\n", numVertices);
     printf("\n| Vertex | Num Edges | Iterations |\n");
     for (int i = 0; i < numVertices; i++) {
         InstrReset();
         GraphBellmanFordAlg *BF_result = GraphBellmanFordAlgExecute(g, i);
 
-        printf("| %6d | %9d | %10lu |\n", numVertices, numEdges, ITERATION);
+        printf("| %6d | %9d | %10lu |\n", i, numEdges, ITERATION);
 
         GraphBellmanFordAlgDestroy(&BF_result);
     }
-    printf("| %6c | %9c | %10c |\n", ' ', ' ', ' ');
+    printf("\n");
 }
 
 int main(void) {
@@ -115,10 +115,38 @@ int main(void) {
         GraphBellmanFordAlgDestroy(&BF_result);
     }
 
-    ComplexityTable(g01);
-    ComplexityTable(dig01);
-    ComplexityTable(dig03);
+    Graph *test1 = GraphCreate(5, 0, 0);
+    Graph *test2 = GraphCreate(5, 0, 0);
+    GraphAddEdge(test2, 0, 1);
+    GraphAddEdge(test2, 1, 2);
+    GraphAddEdge(test2, 2, 3);
+    GraphAddEdge(test2, 3, 4);
 
+    Graph *test3 = GraphCreate(5, 0, 0);
+    GraphAddEdge(test3, 0, 1);
+    GraphAddEdge(test3, 0, 2);
+    GraphAddEdge(test3, 0, 3);
+    GraphAddEdge(test3, 0, 4);
+
+    GraphAddEdge(test3, 1, 2);
+    GraphAddEdge(test3, 1, 3);
+    GraphAddEdge(test3, 1, 4);
+
+    GraphAddEdge(test3, 2, 3);
+    GraphAddEdge(test3, 2, 4);
+
+    GraphAddEdge(test3, 3, 4);
+
+    GraphDisplayDOT(test3);
+
+    ComplexityTable(test1);
+    ComplexityTable(test2);
+    ComplexityTable(test3);
+
+
+    GraphDestroy(&test1);
+    GraphDestroy(&test2);
+    GraphDestroy(&test3);
     GraphDestroy(&g01);
     GraphDestroy(&dig01);
     GraphDestroy(&dig03);

@@ -57,13 +57,18 @@ GraphBellmanFordAlg *GraphBellmanFordAlgExecute(Graph *g,
     result->predecessor = (int *)malloc(numVertices * sizeof(int));
     result->marked = (unsigned int *)malloc(numVertices * sizeof(unsigned int));
 
-    assert((result->distance != NULL) && (result->predecessor != NULL) && (result->marked != NULL));
+    assert((result->distance != NULL) && (result->predecessor != NULL) &&
+           (result->marked != NULL));
+
+    // creare an array fo vertices starting on the start vertex
 
     // initialize the result distance, predecessor and marked;
     for (unsigned int i = 0; i < numVertices; i++) {
+        ITERATION++;
         result->distance[i] = -1;
         result->predecessor[i] = -1;
         result->marked[i] = 0; // set all elements to false
+        
     }
 
     // set the distance to the start vertex to 0 and mark it
@@ -76,16 +81,17 @@ GraphBellmanFordAlg *GraphBellmanFordAlgExecute(Graph *g,
 
     for (unsigned int i = 0; i < numVertices; i++) {
         updated = 0;
+        int *justMarked = calloc(numVertices, numVertices * sizeof(unsigned int));
         for (unsigned int u = 0; u < numVertices; u++) {
-            if (result->marked[u] == 0) // ignores unmarked elements
+            if (result->marked[u] == 0 || justMarked[u] == 1) // ignores unmarked elements
                 continue;
 
             adjacents = GraphGetAdjacentsTo(g, u);
             unsigned int size = adjacents[0]; // number of adjacent vertices
 
             for (unsigned int j = 1; j <= size; j++) {
+                ITERATION++;
                 unsigned int v = adjacents[j];
-                ITERATION++;            
                 // checks if theres no path to the vertex v or if the new path
                 // is shorter
                 if (result->distance[v] == -1 ||
@@ -95,14 +101,19 @@ GraphBellmanFordAlg *GraphBellmanFordAlgExecute(Graph *g,
                     result->distance[v] = result->distance[u] + 1;
                     result->predecessor[v] = u;
                     result->marked[v] = 1;
+                    justMarked[v] = 1;
 
                     updated = 1;
                 }
             }
             free(adjacents); // free the array with the adjacent vertices
         }
-        if (!updated) break;
+        if (!updated)
+            break;
+
+        free(justMarked);
     }
+
 
     return result;
 }
