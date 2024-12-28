@@ -11,6 +11,9 @@
 #include "Graph.h"
 #include "GraphTransitiveClosure.h"
 #include "instrumentation.h"
+#include <stdio.h>
+#include <stdlib.h> 
+#include <time.h>
 
 #define ITERATION InstrCount[0]
 
@@ -29,6 +32,7 @@ void complexityTable1(Graph *g) {
 }
 
 void complexityTableGood() {
+    printf("\nBest Case");
     printf("\n| Num Vertices | Num Edges | Iterations |\n");
     for (int i = 3; i < 10; i++) {
         Graph *g = GraphCreate(i, 1, 0);
@@ -42,6 +46,7 @@ void complexityTableGood() {
     }
 }
 void complexityTableBad() {
+    printf("\nWorst Case");
     printf("\n| Num Vertices | Num Edges | Iterations |\n");
     for (int i = 3; i < 10; i++) {
         Graph *g = GraphCreateComplete(i, 1);
@@ -55,6 +60,35 @@ void complexityTableBad() {
     }
 }
 
+void complexityTableRandom() {
+    printf("\nRandom Case");
+    printf("\n| Num Vertices | Num Edges | Iterations |\n");
+
+    srand(time(NULL)); // Seed the random number generator
+
+    for (int i = 2; i < 1024; i *= 2) {
+        Graph *g = GraphCreate(i, 1, 0); // Create a graph with `i` vertices
+
+        // Randomize edge density: Between i (sparse) and i*i/2 (dense)
+        int maxEdges = i * (i - 1) / 2;   // Maximum edges for a directed graph
+        int targetEdges = rand() % maxEdges + 1; // Random number of edges between 1 and maxEdges
+        int numEdges = 0;
+
+        for (int j = 0; j < targetEdges; j++) {
+            int u = rand() % i; // Random vertex u
+            int v = rand() % i; // Random vertex v
+            if (u != v && GraphAddEdge(g, u, v)) {
+                numEdges++;
+            }
+        }
+
+        InstrReset();
+        Graph *TC_result = GraphComputeTransitiveClosure(g);
+        printf("| %12d | %9d | %10lu |\n", i, numEdges, ITERATION);
+        GraphDestroy(&TC_result);
+        GraphDestroy(&g);
+    }
+}
 int main(void) {
     InstrCalibrate();
     InstrName[0] =
@@ -105,8 +139,8 @@ int main(void) {
 
     complexityTableGood();
     complexityTableBad();
+    complexityTableRandom();
 
-    GraphDisplayDOT(test2);
     GraphDestroy(&test1);
     GraphDestroy(&test2);
 

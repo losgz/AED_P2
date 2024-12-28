@@ -12,6 +12,8 @@
 #include "Graph.h"
 #include "GraphBellmanFordAlg.h"
 #include "instrumentation.h"
+#include <stdlib.h> 
+#include <time.h>
 
 #define ITERATION InstrCount[0]
 
@@ -39,7 +41,7 @@ void complexityTableGood() {
         int numEdges = GraphGetNumEdges(g);
 
         InstrReset();
-        GraphBellmanFordAlg *BF_result = GraphBellmanFordAlgExecute(g, 1);
+        GraphBellmanFordAlg *BF_result = GraphBellmanFordAlgExecute(g, 0);
         printf("| %12d | %9d | %10lu |\n", i, numEdges, ITERATION);
         GraphBellmanFordAlgDestroy(&BF_result);
         GraphDestroy(&g);
@@ -54,7 +56,37 @@ void complexityTableBad() {
         int numEdges = GraphGetNumEdges(g);
 
         InstrReset();
-        GraphBellmanFordAlg *BF_result = GraphBellmanFordAlgExecute(g, 1);
+        GraphBellmanFordAlg *BF_result = GraphBellmanFordAlgExecute(g, 0);
+        printf("| %12d | %9d | %10lu |\n", i, numEdges, ITERATION);
+        GraphBellmanFordAlgDestroy(&BF_result);
+        GraphDestroy(&g);
+    }
+}
+
+void complexityTableRandom() {
+    printf("\nRandom Case");
+    printf("\n| Num Vertices | Num Edges | Iterations |\n");
+
+    srand(time(NULL)); // Seed the random number generator
+
+    for (int i = 2; i < 1024; i *= 2) {
+        Graph *g = GraphCreate(i, 1, 0); // Create a graph with `i` vertices
+
+        // Randomize edge density: Between i (sparse) and i*i/2 (dense)
+        int maxEdges = i * (i - 1) / 2;   // Maximum edges for a directed graph
+        int targetEdges = rand() % maxEdges + 1; // Random number of edges between 1 and maxEdges
+        int numEdges = 0;
+
+        for (int j = 0; j < targetEdges; j++) {
+            int u = rand() % i; // Random vertex u
+            int v = rand() % i; // Random vertex v
+            if (u != v && GraphAddEdge(g, u, v)) {
+                numEdges++;
+            }
+        }
+
+        InstrReset();
+        GraphBellmanFordAlg *BF_result = GraphBellmanFordAlgExecute(g, 0);
         printf("| %12d | %9d | %10lu |\n", i, numEdges, ITERATION);
         GraphBellmanFordAlgDestroy(&BF_result);
         GraphDestroy(&g);
@@ -160,6 +192,7 @@ int main(void) {
 
     complexityTableGood();
     complexityTableBad();
+    complexityTableRandom();
 
     GraphDestroy(&test1);
     GraphDestroy(&test2);
