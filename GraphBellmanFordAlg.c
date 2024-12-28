@@ -81,8 +81,8 @@ GraphBellmanFordAlg *GraphBellmanFordAlgExecute(Graph *g,
 
     for (unsigned int i = 1; i < numVertices; i++) {
 
-        updated = 0;
-        unsigned int *justMarked = calloc(numVertices, numVertices * sizeof(unsigned int));
+        updated = 0; // to check if theres updates in the iteration
+        unsigned int *justMarked = calloc(numVertices, sizeof(unsigned int));
 
         for (unsigned int u = 0; u < numVertices; u++) {
 
@@ -96,6 +96,7 @@ GraphBellmanFordAlg *GraphBellmanFordAlgExecute(Graph *g,
             for (unsigned int j = 1; j <= size; j++) {
 
                 ITERATION++;
+
                 unsigned int v = adjacents[j];
                 // checks if theres no path to the vertex v or if the new path
                 // is shorter
@@ -114,10 +115,10 @@ GraphBellmanFordAlg *GraphBellmanFordAlgExecute(Graph *g,
 
             free(adjacents); // free the array with the adjacent vertices
         }
-        if (!updated)
-            break;
-
         free(justMarked);
+
+        if (!updated) // if theres no updates break
+            break;
     }
 
 

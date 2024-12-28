@@ -14,19 +14,45 @@
 
 #define ITERATION InstrCount[0]
 
-void complexityTable(Graph *g) {
+void complexityTable1(Graph *g) {
     int numVertices = GraphGetNumVertices(g);
     int numEdges = GraphGetNumEdges(g);
 
-    printf("\n| Vertex | Num Edges | Iterations |\n");
+    printf("\nNum Vertices: %d\n", numVertices);
+    printf("| Vertex | Num Edges | Iterations |\n");
     for (int i = 0; i < numVertices; i++) {
         InstrReset();
         Graph *TC_result = GraphComputeTransitiveClosure(g);
-        printf("| %6d | %9d | %10lu |\n", numVertices, numEdges, ITERATION);
+        printf("| %6d | %9d | %10lu |\n", i, numEdges, ITERATION);
         GraphDestroy(&TC_result);
     }
+}
 
-    printf("| %6c | %9c | %10c |\n", ' ', ' ', ' ');
+void complexityTableGood() {
+    printf("\n| Num Vertices | Num Edges | Iterations |\n");
+    for (int i = 3; i < 10; i++) {
+        Graph *g = GraphCreate(i, 1, 0);
+        int numEdges = GraphGetNumEdges(g);
+
+        InstrReset();
+        Graph *TC_result = GraphComputeTransitiveClosure(g);
+        printf("| %12d | %9d | %10lu |\n", i, numEdges, ITERATION);
+        GraphDestroy(&TC_result);
+        GraphDestroy(&g);
+    }
+}
+void complexityTableBad() {
+    printf("\n| Num Vertices | Num Edges | Iterations |\n");
+    for (int i = 3; i < 10; i++) {
+        Graph *g = GraphCreateComplete(i, 1);
+        int numEdges = GraphGetNumEdges(g);
+
+        InstrReset();
+        Graph *TC_result = GraphComputeTransitiveClosure(g);
+        printf("| %12d | %9d | %10lu |\n", i, numEdges, ITERATION);
+        GraphDestroy(&TC_result);
+        GraphDestroy(&g);
+    }
 }
 
 int main(void) {
@@ -71,8 +97,18 @@ int main(void) {
 
     GraphCheckInvariants(tcdig03);
 
-    complexityTable(dig01);
-    complexityTable(dig03);
+    Graph *test1 = GraphCreate(5, 1, 0);
+    Graph *test2 = GraphCreateComplete(5, 1);
+
+    complexityTable1(test1);
+    complexityTable1(test2);
+
+    complexityTableGood();
+    complexityTableBad();
+
+    GraphDisplayDOT(test2);
+    GraphDestroy(&test1);
+    GraphDestroy(&test2);
 
     GraphDestroy(&dig01);
     GraphDestroy(&dig03);

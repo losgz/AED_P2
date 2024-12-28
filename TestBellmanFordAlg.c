@@ -31,6 +31,36 @@ void ComplexityTable(Graph *g) {
     printf("\n");
 }
 
+void complexityTableGood() {
+    printf("\nBest Case");
+    printf("\n| Num Vertices | Num Edges | Iterations |\n");
+    for (int i = 3; i < 10; i++) {
+        Graph *g = GraphCreate(i, 1, 0);
+        int numEdges = GraphGetNumEdges(g);
+
+        InstrReset();
+        GraphBellmanFordAlg *BF_result = GraphBellmanFordAlgExecute(g, 1);
+        printf("| %12d | %9d | %10lu |\n", i, numEdges, ITERATION);
+        GraphBellmanFordAlgDestroy(&BF_result);
+        GraphDestroy(&g);
+    }
+}
+
+void complexityTableBad() {
+    printf("\nWorst Case");
+    printf("\n| Num Vertices | Num Edges | Iterations |\n");
+    for (int i = 3; i < 10; i++) {
+        Graph *g = GraphCreateComplete(i, 1);
+        int numEdges = GraphGetNumEdges(g);
+
+        InstrReset();
+        GraphBellmanFordAlg *BF_result = GraphBellmanFordAlgExecute(g, 1);
+        printf("| %12d | %9d | %10lu |\n", i, numEdges, ITERATION);
+        GraphBellmanFordAlgDestroy(&BF_result);
+        GraphDestroy(&g);
+    }
+}
+
 int main(void) {
 
     InstrCalibrate();
@@ -124,12 +154,12 @@ int main(void) {
 
     Graph *test3 = GraphCreateComplete(5, 0);
 
-    GraphDisplayDOT(test3);
-
     ComplexityTable(test1);
     ComplexityTable(test2);
     ComplexityTable(test3);
 
+    complexityTableGood();
+    complexityTableBad();
 
     GraphDestroy(&test1);
     GraphDestroy(&test2);
