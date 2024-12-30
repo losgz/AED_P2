@@ -79,7 +79,7 @@ GraphBellmanFordAlg *GraphBellmanFordAlgExecute(Graph *g,
     unsigned int *adjacents;
     int updated;
 
-    for (unsigned int i = 1; i < numVertices; i++) {
+    for (unsigned int i = 0; i < numVertices; i++) {
 
         updated = 0; // to check if theres updates in the iteration
         unsigned int *justMarked = calloc(numVertices, sizeof(unsigned int));
