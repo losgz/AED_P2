@@ -57,6 +57,8 @@ GraphAllPairsShortestDistancesExecute(Graph *g) {
 
         result->distance[i] = (int *)malloc(numVertices * sizeof(int));
 
+        assert(result->distance[i] != NULL);
+
         for (unsigned int j = 0; j < numVertices; j++) {
             distance = GraphBellmanFordAlgDistance(sdGraph, j); // distance for i to j
             result->distance[i][j] = distance;
